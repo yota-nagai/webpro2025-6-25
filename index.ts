@@ -29,17 +29,17 @@ app.get('/', async (req, res) => {
 
 // "/users"へのPOSTリクエストに対する処理（フォームからのユーザー追加）
 app.post('/users', async (req, res) => {
-  // フォームから送信された名前を取得
-  const name = req.body.name; 
+  const name = req.body.name;
+  // フォームから送信された年齢を取得し、数値に変換する。入力がなければnullにする。
+  const age = req.body.age ? Number(req.body.age) : null;
+
   if (name) {
-    // 新しいユーザーをデータベースに作成
-    const newUser = await prisma.user.create({
-      data: { name },
+    await prisma.user.create({
+      data: { name, age }, // データベースに名前と年齢を保存
     });
-    console.log('新しいユーザーを追加しました:', newUser);
+    console.log('新しいユーザーを追加しました:', { name, age });
   }
-  // ユーザー追加後、一覧ページにリダイレクト
-  res.redirect('/'); 
+  res.redirect('/'); // ユーザー追加後、一覧ページにリダイレクト
 });
 
 // サーバーを起動
